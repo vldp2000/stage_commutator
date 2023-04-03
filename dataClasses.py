@@ -6,8 +6,8 @@ class Switch(object):
   Switch = 0,  
   Gpio = 0,
   State = 'off'
-  def __init__(self, num, port, st):
-    self.Switch = num
+  def __init__(self, sw, port, st):
+    self.Switch = sw
     self.Gpio = port
     self.State = st
 
@@ -21,9 +21,5 @@ class Switch(object):
       return self.State
 
 #----------------------------------------------------------------
-
-class CustomEncoder(json.JSONEncoder):
-  def default(self, o):
-    return {'{}'.format(o.__class__.__name__): o.__dict__}
 
 #----------------------------------------------------------------

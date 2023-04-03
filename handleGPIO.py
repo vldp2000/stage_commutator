@@ -25,3 +25,11 @@ def validateGPIO(pin):
         return True
     else:
         return False
+    
+def initSwitches(dict):
+    keys = dict.keys()
+    for key in keys:
+        pin = dict[key]["Gpio"]
+        initGPIO(pin)
+        state = setLedStatus(pin,"off")
+        dict[key]["State"] = state
