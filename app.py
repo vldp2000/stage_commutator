@@ -46,8 +46,11 @@ def get_Switches():
         pprint.pprint(state)
         gSwitches[key]["State"] = state
         activeSwitches.append( Switch(key, pin, state))
-    pprint.pprint(json.dumps(activeSwitches))
-    return  jsonify(json.dumps(activeSwitches)), 200
+    jsonStr = json.dumps(activeSwitches,
+    indent=4, sort_keys=True, cls=CustomEncoder,
+    separators=(',', ': '), ensure_ascii=False )       
+    pprint.pprint(jsonStr)
+    return  jsonify(jsonStr), 200
 
 @app.route('/commutator/mapping', methods = ['POST'])
 def update_Mapping():
