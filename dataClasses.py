@@ -3,21 +3,21 @@ import json
 #----------------------------------------------------------------
 
 class Switch(object):
-  Number = 0,  
-  GPIO = 0,
+  Switch = 0,  
+  Gpio = 0,
   State = 'off'
   def __init__(self, num, port, st):
-    self.Number = num
-    self.GPIO = port
+    self.Switch = num
+    self.Gpio = port
     self.State = st
 
-  def getNumber(self):
-      return self.Number
+  def getSwitch(self):
+      return self.Switch
 
-  def getGPIO(self):
-      return self.GPIO
+  def getGpio(self):
+      return self.Gpio
 
-  def getstate(self):
+  def getState(self):
       return self.State
 
 #----------------------------------------------------------------
