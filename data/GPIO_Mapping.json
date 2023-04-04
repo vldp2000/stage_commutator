@@ -1,4 +1,18 @@
 {
-    "1": {"Gpio": 24, "State": "off"},
-    "2": {"Gpio": 26, "State": "on"}
+    "1": {
+        "Gpio": 24,
+        "State": "off"
+    },
+    "2": {
+        "Gpio": 26,
+        "State": "off"
+    },
+    "3": {
+        "Gpio": 27,
+        "State": "off"
+    },
+    "4": {
+        "Gpio": 4,
+        "State": "off"
+    }
 }

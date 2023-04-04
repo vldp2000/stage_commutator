@@ -1,9 +1,8 @@
 
 import json
-import flask
+#import flask
 import pprint
 from flask import Flask, request, Response, jsonify 
-#from flask_api import status
 from dataClasses import *
 from handleGPIO import *
 from dataClasses import *
@@ -19,16 +18,25 @@ initSwitches(gSwitches)
 @app.route('/commutator/switch', methods = ['GET'])
 def get_Switch():
     global gSwitches
-    switch = request.args.get('switch')
-    pin = gSwitches[switch]
+    #return "OK",200
+    switch = request.args['switch']
+    print (switch)
+    pin = gSwitches[str(switch)]['Gpio']
+    print (pin)
     result = getLedStatus(pin)
     return  jsonify({'State': result }), 200
 
 @app.route('/commutator/switch', methods = ['POST'])
 def update_Switch():
+    global gSwitches
     data = json.loads(request.data)
-    pin = data.Switch
-    state = data.State
+    print(data)
+    switch = data['Switch']
+    print(gSwitches)
+    print('<><><>')
+    state = data['State']
+    print (gSwitches[str(switch)])
+    pin = gSwitches[str(switch)]['Gpio']
     setLedStatus(pin, state)
     return state, 200
 
@@ -56,22 +64,25 @@ def get_Switches():
         separators = (',', ': '), 
         ensure_ascii = False 
     )       
-    print("-------------------")
     print(jsonStr)
     return  jsonStr, 200
 
 @app.route('/commutator/mapping', methods = ['POST'])
 def update_Mapping():
-    global gSwitches
-    switches = json.loads(request.data)
+    global gSwitches    
+    list = json.loads(request.data)["ActiveSwitches"]
     gSwitches = {}       
-    for item in switches:
-        if (validateGPIO(item.Gpio)):           
-            setLedStatus(item.Gpio, "off")
-            gSwitches[item]["Gpio"] = item.Gpio
-            gSwitches[item]["State"] = "off"           
+    for item in list:
+        print(item)
+        pin = item["Gpio"]
+        switch = item["Switch"]
+        state = "off"
+        if (validateGPIO(pin)): 
+            initPin(pin)          
+            setLedStatus(pin, state)
+            gSwitches[str(switch)] = {'Gpio': pin, 'State': state}
         else:
-            return  jsonify({'error': "Invalid GPIO "+item.Gpio}), 400
+            return  jsonify({'error': "Invalid GPIO "+str(pin)}), 400
     saveGPIOMapping(gSwitches)
     return "",200
 
