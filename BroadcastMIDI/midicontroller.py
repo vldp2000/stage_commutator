@@ -6,8 +6,8 @@ import struct
 
 from array import *
 from time import sleep
-from config import *
-import dataHelper
+from raveloxConfig import *
+from dataHelper import *
 
 
 #Global Variables
@@ -23,24 +23,25 @@ def printDebug(message):
     print(message)
 
 #----------------------------------------------------------------
-
-def connectRavelox():
+def connectToRaveloxMidi():
   global gRaveloxClient
   try:
-    connect_tuple = ( RAVELOX_HOST, RAVELOX_PORT )
-    gRaveloxClient = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    gRaveloxClient.connect( connect_tuple )   
+    local_port = RAVELOX_PORT
+    local_host = RAVELOX_HOST
+    family = socket.AF_INET
+    connect_tuple = ( local_host, local_port )
+    gRaveloxClient = socket.socket( family, socket.SOCK_DGRAM )
+    gRaveloxClient.connect( connect_tuple )
+    sleep(1)
     return True
   except:
-    # pprint.pprint(sys.exc_info())
+    print("Error. Can not connect to RaveloxMidi")
     return False
 
 #----------------------------------------------------------------
 
 def sendGenericMidiCommand(msg0, msg1, msg2):
   # global gRaveloxClient
-
-  message = ""
   message = struct.pack("BBB", msg0, msg1, msg2)
   gRaveloxClient.send(message )      
   
@@ -62,12 +63,18 @@ def getMidiMsg(midiInput):
       gotMsg = 1
       inp = midiInput.read(100)
       for midiMsg in inp:
-        msg = midiMsg[0]
-        msg0 = msg[0]
-        msg1 = msg[1]
-        msg2 = msg[2]
-        sendGenericMidiCommand(msg0, msg1, msg2)
-
+        try:
+          msg = midiMsg[0]
+          msg0 = msg[0]
+          msg1 = msg[1]
+          msg2 = msg[2]
+          
+          if (msg0 != 240 and msg1 != 0 and msg2 != 0):
+            printDebug(f" midiMsg >>> {midiMsg}")
+            printDebug(f"  {msg0} - {msg1} - {msg2}")
+            sendGenericMidiCommand(msg0, msg1, msg2)
+        except:
+          printDebug(f"Error. MIDI message {msg} can not be processed")
 #----------------------------------------------------------------
 
 def getListOfRaveloxMidiClients():
@@ -85,7 +92,7 @@ def getListOfRaveloxMidiClients():
     try:
       data,addr = gRaveloxClient.recvfrom(8192)
       if data:
-        result = dataHelper.unicodetoASCII(str(data))
+        result = unicodetoASCII(str(data))
         break
     except:
       pass
@@ -120,9 +127,11 @@ midiInput = None
 
 while not portOk:
   try:
-    result = connectRavelox()
+    result = connectToRaveloxMidi()
 
     if result:
+      printDebug("Connected to raveloxmidi...")
+      printDebug(f"Trying to initialize MIDI device {pygame.midi.get_device_info(gMidiDevice)}....")
       midiInput = pygame.midi.Input(gMidiDevice)
       sleep(0.04)
       portOk = True
