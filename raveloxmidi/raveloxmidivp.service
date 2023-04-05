@@ -1,0 +1,12 @@
+[Unit]
+After=local-fs.target network.target
+Description=RaveloxMidi.VP
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+ExecStart=/usr/local/bin/raveloxmidi -N -c /usr/local/bin/raveloxmidi.conf
+
+Type=simple
+Restart=on-failure
