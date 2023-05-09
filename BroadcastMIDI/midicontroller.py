@@ -40,13 +40,12 @@ def connectToRaveloxMidi():
 
 #----------------------------------------------------------------
 
-def sendGenericMidiCommand(msg0, msg1, msg2):
+def sendGenericMidiCommand(msg):
   # global gRaveloxClient
-  message = struct.pack("BBB", msg0, msg1, msg2)
-  gRaveloxClient.send(message )      
-  
+  #message = struct.pack("BBB", msg[0], msg[1], msg[2])
+  gRaveloxClient.send(msg)       
   if gMode == 'Debug':
-    printDebug("SEND RAVELOX GENERIC MESSAGE %d %d %d" % (msg0, msg1, msg2))
+    printDebug(f"SEND RAVELOX GENERIC MESSAGE {msg}")
 
 #----------------------------------------------------------------
 
@@ -65,15 +64,10 @@ def getMidiMsg(midiInput):
       for midiMsg in inp:
         try:
           msg = midiMsg[0]
-          printDebug(f" Message received: {msg}")         
-          msg0 = msg[0]
-          msg1 = msg[1]
-          msg2 = msg[2]         
-          if (msg0 != 240 and msg1 != 0 and msg2 != 0):
+          if (msg[0] != 240 and msg[1] != 0 and msg[2] != 0):
             gRaveloxClient.send(msg)
-          #  printDebug(f" midiMsg >>> {midiMsg}")
-          #  printDebug(f"  {msg0} - {msg1} - {msg2}")
-          #  sendGenericMidiCommand(msg0, msg1, msg2)
+            printDebug(f"Message received: {msg}")         
+            #sendGenericMidiCommand(msg0, msg1, msg2)
         except:
           printDebug(f"Error. MIDI message {msg} can not be processed")
 #----------------------------------------------------------------
