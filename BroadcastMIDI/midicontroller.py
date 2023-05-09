@@ -72,6 +72,7 @@ def getMidiMsg(midiInput):
             #sendGenericMidiCommand(msg0, msg1, msg2)
         except:
           printDebug(f"Error. MIDI message {msg} can not be processed")
+          
 #----------------------------------------------------------------
 
 def getListOfRaveloxMidiClients():
