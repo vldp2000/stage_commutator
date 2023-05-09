@@ -45,7 +45,7 @@ def sendGenericMidiCommand(msg):
   message = struct.pack("BBB", msg[0], msg[1], msg[2])
   gRaveloxClient.send(message)       
   if gMode == 'Debug':
-    printDebug(f"SEND RAVELOX GENERIC MESSAGE {message")
+    printDebug(f"SEND RAVELOX GENERIC MESSAGE {message}")
 
 #----------------------------------------------------------------
 
