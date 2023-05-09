@@ -63,7 +63,9 @@ def getMidiMsg(midiInput):
       inp = midiInput.read(100)
       for midiMsg in inp:
         try:
+          printDebug(f"Midi Message received: {midiMsg}")         
           msg = midiMsg[0]
+          printDebug(f"midiMsg[0]: {msg}")         
           if (msg[0] != 248 and msg[1] != 0 and msg[2] != 0):
             gRaveloxClient.send(msg)
             printDebug(f"Message received: {msg}")         
