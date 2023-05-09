@@ -1,6 +1,6 @@
 [Unit]
 After=local-fs.target network.target
-Description=RaveloxMidi.VP
+Description=RaveloxMidi
 
 [Install]
 WantedBy=multi-user.target

@@ -32,7 +32,7 @@ def connectToRaveloxMidi():
     connect_tuple = ( local_host, local_port )
     gRaveloxClient = socket.socket( family, socket.SOCK_DGRAM )
     gRaveloxClient.connect( connect_tuple )
-    sleep(1)
+    sleep(0.5)
     return True
   except:
     print("Error. Can not connect to RaveloxMidi")
@@ -133,9 +133,9 @@ while not portOk:
       printDebug("Connected to raveloxmidi...")
       printDebug(f"Trying to initialize MIDI device {pygame.midi.get_device_info(gMidiDevice)}....")
       midiInput = pygame.midi.Input(gMidiDevice)
-      sleep(0.04)
+      sleep(1)
       portOk = True
-    else:
+    else:v
       printDebug("waiting for raveloxmidi...")
       sleep(1)
 
