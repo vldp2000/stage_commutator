@@ -65,14 +65,15 @@ def getMidiMsg(midiInput):
       for midiMsg in inp:
         try:
           msg = midiMsg[0]
-          msg0 = msg[0]
-          msg1 = msg[1]
-          msg2 = msg[2]
-          
-          if (msg0 != 240 and msg1 != 0 and msg2 != 0):
-            printDebug(f" midiMsg >>> {midiMsg}")
-            printDebug(f"  {msg0} - {msg1} - {msg2}")
-            sendGenericMidiCommand(msg0, msg1, msg2)
+          printDebug(f" Message received: {msg}")
+          gRaveloxClient.send(msg)      
+          #msg0 = msg[0]
+          #msg1 = msg[1]
+          #msg2 = msg[2]         
+          #if (msg0 != 240 and msg1 != 0 and msg2 != 0):
+          #  printDebug(f" midiMsg >>> {midiMsg}")
+          #  printDebug(f"  {msg0} - {msg1} - {msg2}")
+          #  sendGenericMidiCommand(msg0, msg1, msg2)
         except:
           printDebug(f"Error. MIDI message {msg} can not be processed")
 #----------------------------------------------------------------
@@ -135,7 +136,7 @@ while not portOk:
       midiInput = pygame.midi.Input(gMidiDevice)
       sleep(1)
       portOk = True
-    else:v
+    else:
       printDebug("waiting for raveloxmidi...")
       sleep(1)
 
