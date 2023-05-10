@@ -42,7 +42,7 @@ def connectToRaveloxMidi():
 
 def sendGenericMidiCommand(msg):
   # global gRaveloxClient
-  message = struct.pack("BBB", msg[0], msg[1], msg[2])
+  message = struct.pack("BBB", int(msg[0]), int(msg[1]), int(msg[2]))
   gRaveloxClient.send(message)       
   if gMode == 'Debug':
     printDebug(f"SEND RAVELOX GENERIC MESSAGE {message}")
@@ -62,16 +62,14 @@ def getMidiMsg(midiInput):
       gotMsg = 1
       inp = midiInput.read(100)
       for midiMsg in inp:
-
         try:
-          printDebug(f"Message sent : {midiMsg} , {midiMsg[0]}")         
           msg = midiMsg[0]
           if (msg[0] != 248 and msg[1] != 0 and msg[2] != 0):
+            printDebug(f"Message received : {midiMsg} , {midiMsg[0]}")         
             #gRaveloxClient.send(msg)
-            printDebug(f"Message sent : {msg}")         
             sendGenericMidiCommand(msg)
         except:
-          printDebug(f"Error. MIDI message {msg} can not be processed")
+          printDebug(f"Error. incoming message {midiMsg} can not be processed")
 
 #----------------------------------------------------------------
 
