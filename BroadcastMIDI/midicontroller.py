@@ -58,7 +58,7 @@ def getMidiMsg(midiInput):
   while not(gotMsg):
     if midiInput.poll():    
       gotMsg = 1
-      inp = midiInput.read(100)
+      inp = midiInput.read(10)
       for midiMsg in inp:
         try:
           msg = midiMsg[0]
