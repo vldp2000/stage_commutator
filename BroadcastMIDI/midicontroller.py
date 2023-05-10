@@ -53,9 +53,6 @@ def sendGenericMidiCommand(msg):
 
 #----------------------------------------------------------------
 def getMidiMsg(midiInput):
-  # printDebug("..... LISTEN TO MIDI MSG")
-  keepAliveCounter = 0
-  checkRaveloxCounter = 0
   gotMsg = 0
   while not(gotMsg):
     if midiInput.poll():    
@@ -65,14 +62,10 @@ def getMidiMsg(midiInput):
         try:
           msg = midiMsg[0]
           if (msg[0] != 248 and msg[1] != 0 and msg[2] != 0):
-            printDebug(f"Input : {inp}, length:{len(inp)}" )         
-            printDebug(f"Message received : {midiMsg} , {midiMsg[0]}")         
-            #gRaveloxClient.send(msg)
+            printDebug(f"Message received : {midiMsg}")         
             sendGenericMidiCommand(msg)
         except:
           printDebug(f"Error. incoming message {midiMsg} can not be processed")
-    sleep(MIDI_RECEIVE_DELAY)
-
 
 #----------------------------------------------------------------
 
@@ -103,8 +96,8 @@ def getListOfRaveloxMidiClients():
       ##
 ##  if result.find("Vlad's MacBook Pro") > -1:
       ## 
-#----------------------------------------------------------------
 
+#################################################################
 #Main Module 
 #pygame.init()
 pygame.midi.init()
@@ -146,17 +139,18 @@ while not portOk:
 
 printDebug("Everything ready now...")
 
+# There is a method available to extract the list of all the RaveloxMidi subscribers
 #getListOfRaveloxMidiClients()
-#sleep(1)
 
+######################
+# Main Loop
+######################
 while not gExitFlag:
-  printDebug("Call getMidiMsg(midiInput)")
   getMidiMsg(midiInput)
   sleep(MIDI_RECEIVE_DELAY)
 
-#---Close application
-#gRaveloxClient.close()
+####################
+#Close application
 gRaveloxClient.shutdown(2)
-
 del midiInput
 pygame.midi.quit()
