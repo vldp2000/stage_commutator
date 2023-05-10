@@ -14,6 +14,7 @@ from dataHelper import *
 gExitFlag = False
 gMidiDevice = MIDI_INPUT_DEVICE  # Input MIDI device
 gRaveloxClient = None
+gMode = 'Live'
 
 #----------------------------------------------------------------
 
