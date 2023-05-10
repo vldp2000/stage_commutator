@@ -58,7 +58,6 @@ def getMidiMsg(midiInput):
   checkRaveloxCounter = 0
   gotMsg = 0
   while not(gotMsg):
-    sleep(MIDI_RECEIVE_DELAY)
     if midiInput.poll():    
       gotMsg = 1
       inp = midiInput.read(100)
@@ -66,12 +65,14 @@ def getMidiMsg(midiInput):
         try:
           msg = midiMsg[0]
           if (msg[0] != 248 and msg[1] != 0 and msg[2] != 0):
-            printDebug(f"Input : {inp}")         
+            printDebug(f"Input : {inp}, length:{}" )         
             printDebug(f"Message received : {midiMsg} , {midiMsg[0]}")         
             #gRaveloxClient.send(msg)
             sendGenericMidiCommand(msg)
         except:
           printDebug(f"Error. incoming message {midiMsg} can not be processed")
+    sleep(MIDI_RECEIVE_DELAY)
+
 
 #----------------------------------------------------------------
 
@@ -149,7 +150,9 @@ printDebug("Everything ready now...")
 #sleep(1)
 
 while not gExitFlag:
+  printDebug("Call getMidiMsg(midiInput)")
   getMidiMsg(midiInput)
+  sleep(MIDI_RECEIVE_DELAY)
 
 #---Close application
 #gRaveloxClient.close()
