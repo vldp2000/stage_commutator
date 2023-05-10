@@ -15,7 +15,7 @@ gExitFlag = False
 gMidiDevice = MIDI_INPUT_DEVICE  # Input MIDI device
 gRaveloxClient = None
 gMode = 'Live'
-
+gDelayCounter = 0
 #----------------------------------------------------------------
 
 def printDebug(message):
@@ -42,9 +42,10 @@ def connectToRaveloxMidi():
 #----------------------------------------------------------------
 
 def sendGenericMidiCommand(msg):
-  # global gRaveloxClient
+  global gDelayCounter
   message = struct.pack("BBB", int(msg[0]), int(msg[1]), int(msg[2]))
-  gRaveloxClient.send(message)       
+  gRaveloxClient.send(message)
+  gDelayCounter = 0
   if gMode == 'Debug':
     printDebug(f"SEND RAVELOX GENERIC MESSAGE {message}")
 
@@ -145,9 +146,13 @@ printDebug("Everything ready now...")
 ######################
 # Main Loop
 ######################
+gDelayCounter = 0
 while not gExitFlag:
   getMidiMsg(midiInput)
-  sleep(MIDI_RECEIVE_DELAY)
+  gDelayCounter += 1
+  if (gDelayCounter > 1000):
+    sleep(MIDI_RECEIVE_DELAY)
+    gDelayCounter = 1000
 
 ####################
 #Close application
