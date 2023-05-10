@@ -151,7 +151,8 @@ while not gExitFlag:
   getMidiMsg(midiInput)
   gDelayCounter += 1
   if (gDelayCounter > 1000):
-    sleep(MIDI_RECEIVE_DELAY)
+    #sleep(MIDI_RECEIVE_DELAY)
+    sleep(0.005)
     gDelayCounter = 1000
 
 ####################
